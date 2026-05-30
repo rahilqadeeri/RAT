@@ -131,7 +131,7 @@
     <div class="logo">🖥️</div>
     <div>
       <div class="title" style="text-align:center">RemoteSupport</div>
-      <div class="subtitle" style="margin-top:4px">Technician aapki screen dekh sakta hai</div>
+      <div class="subtitle" style="margin-top:4px">Your screen will be shared with the technician</div>
     </div>
 
     <div id="connectSection" style="width:100%;display:flex;flex-direction:column;gap:16px">
@@ -150,10 +150,10 @@
         <span>Session <strong id="sessionCode"></strong> se connected</span>
       </div>
       <div style="font-size:12px;color:#64748b;text-align:center">
-        Technician ab aapki screen dekh aur control kar sakta hai
+        The technician can now view and control your screen
       </div>
       <button class="btn btn-disconnect" onclick="disconnect()">
-        ✕ Session Band Karo
+        ✕ End Session
       </button>
     </div>
 
@@ -176,8 +176,8 @@
 
     function connect() {
       const code = document.getElementById("codeInput").value.trim().toUpperCase();
-      if (code.length < 4) { setStatus("connecting", "Code kam se kam 4 characters ka hona chahiye"); return; }
-      setStatus("connecting", "Connect ho raha hai...");
+      if (code.length < 4) { setStatus("connecting", "Please enter a valid session code"); return; }
+      setStatus("connecting", "Connecting...");
       document.getElementById("connectBtn").disabled = true;
       ipcRenderer.send("connect", code);
     }
@@ -199,7 +199,7 @@
         setStatus("idle", "Disconnected");
       } else if (status === "error") {
         document.getElementById("connectBtn").disabled = false;
-        setStatus("error", "Connection failed — server check karo");
+        setStatus("error", "Connection failed. Please try again.");
       }
     });
 
