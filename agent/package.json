@@ -1,0 +1,14 @@
+{
+  "name": "rst-agent",
+  "version": "1.0.0",
+  "main": "agent.js",
+  "bin": "agent.js",
+  "pkg": {
+    "targets": ["node18-win-x64"],
+    "outputPath": "dist",
+    "assets": []
+  },
+  "dependencies": {
+    "socket.io-client": "^4.7.0"
+  }
+}
