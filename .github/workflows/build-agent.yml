@@ -1,0 +1,35 @@
+name: Build Windows Agent GUI
+
+on:
+  push:
+    paths:
+      - 'agent-gui/**'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        working-directory: ./agent-gui
+        run: npm install
+      
+      - name: Install electron-builder
+        run: npm install -g electron-builder
+      
+      - name: Build Windows exe
+        working-directory: ./agent-gui
+        run: electron-builder --win portable --publish never
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RSTAgent-GUI-Windows
+          path: agent-gui/dist/RSTAgent.exe
