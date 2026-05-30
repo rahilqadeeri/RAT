@@ -38,7 +38,7 @@
       color: #64748b;
       cursor: pointer;
       font-size: 16px;
-      padding: 2px 6px;
+      padding: 2px 8px;
       border-radius: 4px;
     }
     .titlebar-close:hover { background: #ef4444; color: white; }
@@ -61,7 +61,7 @@
       justify-content: center;
       font-size: 28px;
     }
-    .title { font-size: 20px; font-weight: 700; color: #f1f5f9; }
+    .title { font-size: 20px; font-weight: 700; color: #f1f5f9; text-align: center; }
     .subtitle { font-size: 13px; color: #64748b; text-align: center; }
     .input-group { width: 100%; }
     .input-label { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
@@ -91,10 +91,7 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-connect {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: white;
-    }
+    .btn-connect { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
     .btn-connect:hover { opacity: 0.9; transform: translateY(-1px); }
     .btn-connect:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .btn-disconnect {
@@ -130,8 +127,8 @@
   <div class="content">
     <div class="logo">🖥️</div>
     <div>
-      <div class="title" style="text-align:center">RemoteSupport</div>
-      <div class="subtitle" style="margin-top:4px">Your screen will be shared with the technician</div>
+      <div class="title">RemoteSupport</div>
+      <div class="subtitle" style="margin-top:4px">Enter the session code provided by your technician</div>
     </div>
 
     <div id="connectSection" style="width:100%;display:flex;flex-direction:column;gap:16px">
@@ -147,7 +144,7 @@
     <div id="connectedSection" class="hidden" style="width:100%;display:flex;flex-direction:column;gap:16px;align-items:center">
       <div class="status">
         <div class="dot dot-connected"></div>
-        <span>Session <strong id="sessionCode"></strong> se connected</span>
+        <span>Connected to session <strong id="sessionCode"></strong></span>
       </div>
       <div style="font-size:12px;color:#64748b;text-align:center">
         The technician can now view and control your screen
@@ -164,19 +161,16 @@
   </div>
 
   <script>
-    const { ipcRenderer, app } = require("electron");
-    const { app: electronApp } = require("@electron/remote") || {};
+    const { ipcRenderer } = require("electron");
 
     function closeApp() {
-      const { app } = require("electron").remote || require("@electron/remote") || {};
-      window.close();
-      require("electron").ipcRenderer.send("disconnect");
-      setTimeout(() => process.exit(0), 500);
+      ipcRenderer.send("disconnect");
+      setTimeout(() => process.exit(0), 300);
     }
 
     function connect() {
       const code = document.getElementById("codeInput").value.trim().toUpperCase();
-      if (code.length < 4) { setStatus("connecting", "Please enter a valid session code"); return; }
+      if (code.length < 4) { setStatus("error", "Please enter a valid session code"); return; }
       setStatus("connecting", "Connecting...");
       document.getElementById("connectBtn").disabled = true;
       ipcRenderer.send("connect", code);
@@ -204,8 +198,7 @@
     });
 
     function setStatus(type, text) {
-      const dot = document.getElementById("statusDot");
-      dot.className = "dot dot-" + type;
+      document.getElementById("statusDot").className = "dot dot-" + type;
       document.getElementById("statusText").textContent = text;
     }
 
